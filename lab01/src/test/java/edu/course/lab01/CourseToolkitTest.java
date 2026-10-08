@@ -31,4 +31,31 @@ class CourseToolkitTest {
         assertTrue(CourseToolkit.isEven(-8));
     }
 
+    @Test
+    void returnsFalseForNumbersLessThanTwo() {
+        assertFalse(CourseToolkit.isPrime(1));
+        assertFalse(CourseToolkit.isPrime(0));
+        assertFalse(CourseToolkit.isPrime(-7));
+    }
+
+    @Test
+    void returnsTrueForTwo() {
+        assertTrue(CourseToolkit.isPrime(2));
+    }
+
+    @Test
+    void returnsFalseForCompositeNumber() {
+        assertFalse(CourseToolkit.isPrime(9));
+    }
+
+    @Test
+    void returnsFalseForSquareOfPrime() {
+        assertFalse(CourseToolkit.isPrime(49));
+    }
+
+    @Test
+    void returnsTrueForPrimeNumber() {
+        assertTrue(CourseToolkit.isPrime(17));
+    }
+
 }
