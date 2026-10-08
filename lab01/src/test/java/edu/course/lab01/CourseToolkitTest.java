@@ -111,4 +111,32 @@ class CourseToolkitTest {
         assertArrayEquals(new int[]{1, 2, 3}, values);
     }
 
+    @Test
+    void findsMinimum() {
+        assertEquals(-5, CourseToolkit.min(new int[]{3, -5, 10, 0}));
+    }
+
+    @Test
+    void findsMaximum() {
+        assertEquals(10, CourseToolkit.max(new int[]{3, -5, 10, 0}));
+    }
+
+    @Test
+    void minAndMaxWorkForSingleElement() {
+        assertEquals(7, CourseToolkit.min(new int[]{7}));
+        assertEquals(7, CourseToolkit.max(new int[]{7}));
+    }
+
+    @Test
+    void minAndMaxThrowForNullArray() {
+        assertThrows(IllegalArgumentException.class, () -> CourseToolkit.min(null));
+        assertThrows(IllegalArgumentException.class, () -> CourseToolkit.max(null));
+    }
+
+    @Test
+    void minAndMaxThrowForEmptyArray() {
+        assertThrows(IllegalArgumentException.class, () -> CourseToolkit.min(new int[]{}));
+        assertThrows(IllegalArgumentException.class, () -> CourseToolkit.max(new int[]{}));
+    }
+
 }

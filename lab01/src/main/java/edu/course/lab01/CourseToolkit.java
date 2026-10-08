@@ -64,4 +64,36 @@ public final class CourseToolkit {
         return (double) sum / values.length;
     }
 
+    /**
+     * Возвращает минимальный элемент массива.
+     */
+    public static int min(int[] values) {
+        if (values == null || values.length == 0) {
+            throw new IllegalArgumentException("values must not be null or empty");
+        }
+        int result = values[0];
+        for (int i = 1; i < values.length; i++) {
+            if (values[i] < result) {
+                result = values[i];
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Возвращает максимальный элемент массива.
+     */
+    public static int max(int[] values) {
+        if (values == null || values.length == 0) {
+            throw new IllegalArgumentException("values must not be null or empty");
+        }
+        int result = values[0];
+        for (int i = 1; i < values.length; i++) {
+            if (values[i] > result) {
+                result = values[i];
+            }
+        }
+        return result;
+    }
+
 }
