@@ -50,4 +50,18 @@ public final class CourseToolkit {
         return true;
     }
 
+    /**
+     * Возвращает среднее арифметическое элементов массива.
+     */
+    public static double average(int[] values) {
+        if (values == null || values.length == 0) {
+            throw new IllegalArgumentException("values must not be null or empty");
+        }
+        long sum = 0;
+        for (int value : values) {
+            sum += value;
+        }
+        return (double) sum / values.length;
+    }
+
 }

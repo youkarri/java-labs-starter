@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class CourseToolkitTest {
 
@@ -78,6 +80,35 @@ class CourseToolkitTest {
     void throwsForNullText() {
         assertThrows(IllegalArgumentException.class,
                 () -> CourseToolkit.isPalindrome(null));
+    }
+
+    @Test
+    void calculatesAverageOfPositiveNumbers() {
+        assertEquals(2.5, CourseToolkit.average(new int[]{1, 2, 3, 4}), 0.0001);
+    }
+
+    @Test
+    void calculatesAverageWithNegativeNumbers() {
+        assertEquals(-2.0, CourseToolkit.average(new int[]{-1, -2, -3}), 0.0001);
+    }
+
+    @Test
+    void throwsForNullArray() {
+        assertThrows(IllegalArgumentException.class,
+                () -> CourseToolkit.average(null));
+    }
+
+    @Test
+    void throwsForEmptyArray() {
+        assertThrows(IllegalArgumentException.class,
+                () -> CourseToolkit.average(new int[]{}));
+    }
+
+    @Test
+    void doesNotModifyInputArray() {
+        int[] values = {1, 2, 3};
+        CourseToolkit.average(values);
+        assertArrayEquals(new int[]{1, 2, 3}, values);
     }
 
 }
