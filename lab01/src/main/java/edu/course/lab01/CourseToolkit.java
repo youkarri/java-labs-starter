@@ -29,4 +29,25 @@ public final class CourseToolkit {
         }
         return true;
     }
+
+    /**
+     * Возвращает true, если строка читается одинаково в обе стороны.
+     * Регистр и пробелы учитываются.
+     */
+    public static boolean isPalindrome(String text) {
+        if (text == null) {
+            throw new IllegalArgumentException("text must not be null");
+        }
+        int left = 0;
+        int right = text.length() - 1;
+        while (left < right) {
+            if (text.charAt(left) != text.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+
 }
