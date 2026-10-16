@@ -83,4 +83,30 @@ public final class DataSample {
         }
         return sum / features.length;
     }
+
+    /**
+     * Возвращает НОВОЕ наблюдение с признаками в диапазоне [0, 1]
+     * (min-max нормализация). Исходный объект не меняется.
+     * Если все признаки равны, результат состоит из нулей.
+     */
+    public DataSample normalized() {
+        double min = features[0];
+        double max = features[0];
+        for (double value : features) {
+            if (value < min) {
+                min = value;
+            }
+            if (value > max) {
+                max = value;
+            }
+        }
+        double range = max - min;
+        double[] result = new double[features.length];
+        if (range != 0) {
+            for (int i = 0; i < features.length; i++) {
+                result[i] = (features[i] - min) / range;
+            }
+        }
+        return new DataSample(id, label, status, result);
+    }
 }

@@ -126,4 +126,24 @@ class DataSampleTest {
         returned[0] = 100.0;
         assertArrayEquals(new double[]{1.0, 2.0, 3.0}, sample.getFeatures());
     }
+
+    @Test
+    void normalizedScalesToZeroOne() {
+        DataSample normalized = valid().normalized();
+        assertArrayEquals(new double[]{0.0, 0.5, 1.0}, normalized.getFeatures(), 0.0001);
+        assertEquals("s1", normalized.getId());
+    }
+
+    @Test
+    void normalizedDoesNotChangeOriginal() {
+        DataSample sample = valid();
+        sample.normalized();
+        assertArrayEquals(new double[]{1.0, 2.0, 3.0}, sample.getFeatures());
+    }
+
+    @Test
+    void normalizedConstantFeaturesGiveZeros() {
+        DataSample sample = new DataSample("s3", "x", SampleStatus.NEW, new double[]{5, 5, 5});
+        assertArrayEquals(new double[]{0, 0, 0}, sample.normalized().getFeatures(), 0.0001);
+    }
 }
