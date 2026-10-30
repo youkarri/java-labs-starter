@@ -60,4 +60,12 @@ class FeatureProcessorTest {
         FeatureProcessor processor = new FeatureProcessor(new ConstantNormalization());
         assertArrayEquals(new double[]{42}, processor.process(new double[]{1, 2, 3}), 1e-9);
     }
+
+    @Test
+    void usesZScoreStrategy() {
+        FeatureProcessor processor = new FeatureProcessor(new ZScoreNormalization());
+        double expected = Math.sqrt(1.5);
+        assertArrayEquals(new double[]{-expected, 0, expected},
+                processor.process(new double[]{1, 2, 3}), 1e-9);
+    }
 }
