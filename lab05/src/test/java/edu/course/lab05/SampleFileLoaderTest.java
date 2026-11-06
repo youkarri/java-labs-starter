@@ -188,4 +188,31 @@ class SampleFileLoaderTest {
         assertEquals(3, result.getErrors().get(0).getLineNumber());
         assertEquals(5, result.getErrors().get(1).getLineNumber());
     }
+
+    @Test
+    void missingFileThrowsExceptionWithCause() {
+        Path missing = tempDir.resolve("no-such-file.txt");
+
+        DataLoadingException exception =
+                assertThrows(DataLoadingException.class, () -> loader.load(missing));
+
+        assertNotNull(exception.getCause());
+        assertTrue(exception.getCause() instanceof IOException);
+    }
+
+    @Test
+    void invalidUtf8ThrowsExceptionWithCause() throws IOException {
+        Path file = tempDir.resolve("broken.txt");
+        Files.write(file, new byte[]{(byte) 0xC3, (byte) 0x28});
+
+        DataLoadingException exception =
+                assertThrows(DataLoadingException.class, () -> loader.load(file));
+
+        assertTrue(exception.getCause() instanceof IOException);
+    }
+
+    @Test
+    void nullPathIsRejected() {
+        assertThrows(IllegalArgumentException.class, () -> loader.load(null));
+    }
 }
