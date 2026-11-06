@@ -215,4 +215,25 @@ class SampleFileLoaderTest {
     void nullPathIsRejected() {
         assertThrows(IllegalArgumentException.class, () -> loader.load(null));
     }
+
+    @Test
+    void quotedFieldWithDelimiterIsLoaded() throws IOException {
+        Path file = writeFile(HEADER, "S-1;\"cat; small\";camera-1;8;NEW");
+
+        LoadResult result = loader.load(file);
+
+        assertEquals(1, result.getSamples().size());
+        assertEquals("cat; small", result.getSamples().get(0).getLabel());
+    }
+
+    @Test
+    void unclosedQuoteIsReportedAsLineError() throws IOException {
+        Path file = writeFile(HEADER, "S-1;\"cat;camera-1;8;NEW");
+
+        LoadResult result = loader.load(file);
+
+        assertEquals(0, result.getSamples().size());
+        assertEquals(1, result.getErrors().size());
+        assertEquals("line", result.getErrors().get(0).getField());
+    }
 }

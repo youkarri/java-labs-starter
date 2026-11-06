@@ -57,7 +57,13 @@ public final class SampleFileLoader {
 
     private static void parseLine(int lineNumber, String line,
                                   List<DataSample> samples, List<ValidationError> errors) {
-        String[] parts = line.split(";", -1);
+        String[] parts;
+        try {
+            parts = FieldSplitter.split(line);
+        } catch (IllegalArgumentException e) {
+            errors.add(new ValidationError(lineNumber, "line", e.getMessage()));
+            return;
+        }
         if (parts.length != FIELD_NAMES.length) {
             errors.add(new ValidationError(lineNumber, "columns",
                     "expected " + FIELD_NAMES.length + " fields but found " + parts.length));
