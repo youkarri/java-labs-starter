@@ -108,4 +108,84 @@ class SampleFileLoaderTest {
         assertEquals("cat", result.getSamples().get(0).getLabel());
         assertEquals(SampleStatus.READY, result.getSamples().get(0).getStatus());
     }
+
+    @Test
+    void emptyFieldIsReported() throws IOException {
+        Path file = writeFile(HEADER, "S-1;;camera-1;128;READY");
+
+        LoadResult result = loader.load(file);
+
+        assertEquals(0, result.getSamples().size());
+        assertEquals(1, result.getErrors().size());
+        assertEquals(2, result.getErrors().get(0).getLineNumber());
+        assertEquals("label", result.getErrors().get(0).getField());
+    }
+
+    @Test
+    void invalidNumberIsReported() throws IOException {
+        Path file = writeFile(HEADER, "S-1;cat;camera-1;abc;READY");
+
+        LoadResult result = loader.load(file);
+
+        assertEquals(0, result.getSamples().size());
+        assertEquals("featureCount", result.getErrors().get(0).getField());
+    }
+
+    @Test
+    void nonPositiveNumberIsReported() throws IOException {
+        Path file = writeFile(HEADER, "S-1;cat;camera-1;0;READY");
+
+        LoadResult result = loader.load(file);
+
+        assertEquals(0, result.getSamples().size());
+        assertEquals("featureCount", result.getErrors().get(0).getField());
+    }
+
+    @Test
+    void unknownStatusIsReported() throws IOException {
+        Path file = writeFile(HEADER, "S-1;cat;camera-1;128;DONE");
+
+        LoadResult result = loader.load(file);
+
+        assertEquals(0, result.getSamples().size());
+        assertEquals("status", result.getErrors().get(0).getField());
+    }
+
+    @Test
+    void tooFewColumnsAreReported() throws IOException {
+        Path file = writeFile(HEADER, "S-1;cat;camera-1;128");
+
+        LoadResult result = loader.load(file);
+
+        assertEquals(0, result.getSamples().size());
+        assertEquals("columns", result.getErrors().get(0).getField());
+    }
+
+    @Test
+    void tooManyColumnsAreReported() throws IOException {
+        Path file = writeFile(HEADER, "S-1;cat;camera-1;128;READY;extra");
+
+        LoadResult result = loader.load(file);
+
+        assertEquals(0, result.getSamples().size());
+        assertEquals("columns", result.getErrors().get(0).getField());
+    }
+
+    @Test
+    void validAndInvalidRowsAreProcessedTogether() throws IOException {
+        Path file = writeFile(HEADER,
+                "S-1;cat;camera-1;10;READY",
+                "S-2;dog;camera-2;abc;NEW",
+                "S-3;bird;camera-3;30;LABELED",
+                "S-4;fish");
+
+        LoadResult result = loader.load(file);
+
+        assertEquals(2, result.getSamples().size());
+        assertEquals("S-1", result.getSamples().get(0).getId());
+        assertEquals("S-3", result.getSamples().get(1).getId());
+        assertEquals(2, result.getErrors().size());
+        assertEquals(3, result.getErrors().get(0).getLineNumber());
+        assertEquals(5, result.getErrors().get(1).getLineNumber());
+    }
 }
