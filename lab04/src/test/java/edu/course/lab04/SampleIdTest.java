@@ -40,4 +40,12 @@ class SampleIdTest {
     void rejectsNegativeNumber() {
         assertThrows(IllegalArgumentException.class, () -> new SampleId("train", -1));
     }
+
+    @Test
+    void differentIdsMayShareHashCode() {
+        SampleId first = new SampleId("Aa", 1);
+        SampleId second = new SampleId("BB", 1);
+        assertEquals(first.hashCode(), second.hashCode());
+        assertFalse(first.equals(second));
+    }
 }

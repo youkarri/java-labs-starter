@@ -76,4 +76,19 @@ class SampleRegistryTest {
         assertThrows(IllegalArgumentException.class,
                 () -> registry.put(new SampleId("train", 1), null));
     }
+
+    @Test
+    void collidingKeysKeepDifferentValues() {
+        SampleRegistry registry = new SampleRegistry();
+        SampleId first = new SampleId("Aa", 1);
+        SampleId second = new SampleId("BB", 1);
+        assertEquals(first.hashCode(), second.hashCode());
+        DataSample firstValue = sample("first");
+        DataSample secondValue = sample("second");
+        registry.put(first, firstValue);
+        registry.put(second, secondValue);
+        assertEquals(2, registry.size());
+        assertSame(firstValue, registry.get(first));
+        assertSame(secondValue, registry.get(second));
+    }
 }
