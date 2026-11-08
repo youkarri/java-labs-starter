@@ -40,4 +40,6 @@ class FieldSplitterTest {
     void characterAfterClosingQuoteIsRejected() {
         assertThrows(IllegalArgumentException.class, () -> FieldSplitter.split("\"a\"b;c"));
     }
+
+
 }
